@@ -30,9 +30,16 @@ export const analyzeVideoUrl = async (url: string): Promise<VideoInfo> => {
       "--no-playlist",
       "--geo-bypass",
       "--add-header", "Accept-Language:en-US,en;q=0.9",
-      "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-      url
+      "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
     ];
+
+    // Add cookies if the file exists
+    const cookiePath = path.join(process.cwd(), "cookies.txt");
+    if (fs.existsSync(cookiePath)) {
+      args.push("--cookies", "cookies.txt");
+    }
+
+    args.push(url);
 
     console.log(`Running: ${ytDlpPath} ${args.join(' ')}`);
 

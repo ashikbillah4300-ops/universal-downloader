@@ -26,6 +26,9 @@ RUN npm install
 # Copy the rest of the source code
 COPY . .
 
+# Ensure cookies.txt exists (create empty if missing) to avoid errors
+RUN touch cookies.txt
+
 # Fix permissions for binaries (crucial for Windows to Linux moves)
 RUN chmod -R +x node_modules/.bin
 

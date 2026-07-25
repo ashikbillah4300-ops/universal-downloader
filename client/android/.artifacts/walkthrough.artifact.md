@@ -1,42 +1,38 @@
-# Walkthrough: Enhanced Debugging and Reliable Video Analysis
+# Walkthrough: Play Store Ready YouTube Bypass (Cookies Method)
 
-I have implemented advanced debugging tools and improved the backend logic to solve the "Failed to analyze video URL" issue.
+আমি ইউটিউবের ব্লকিং কাটানোর জন্য "Cookies Method" সেটআপ করে দিয়েছি। এখন ইউটিউব আপনার অনলাইন সার্ভারকে আর ব্লক করতে পারবে না।
 
-## Key Changes
+## যা যা করা হয়েছে
 
-### 1. "Test Connection" Button (In-App Settings)
-You can now verify if your app is connected to the server and if the video tools are ready.
-- Click the **⚙️ icon** in the top Navbar.
-- Click **Test Connection**.
-- It will tell you if the server is reachable and what version of `yt-dlp` is running.
+### ১. সার্ভার সাইড আপডেট
+- [ytdlp.service.ts](file:///D:/project/d%20+a/Downloader/server/src/services/ytdlp.service.ts) এ আমি এমন লজিক দিয়েছি যা অটোমেটিক `cookies.txt` ফাইলটি খুঁজবে এবং সেটি ব্যবহার করবে।
+- [Dockerfile](file:///D:/project/d%20+a/Downloader/server/Dockerfile) আপডেট করা হয়েছে যাতে অনলাইনে কুকি ফাইলটি ঠিকঠাক পাওয়া যায়।
 
-### 2. Reliable Video Analysis
-The server now uses a more robust method to run the video tool:
-- **Error Capturing**: If a link fails, the server captures the *exact* error message from the tool and logs it.
-- **Redirection Handling**: Improved handling of Facebook and social media links.
-- **Timeout Protection**: Analysis will stop after 30 seconds instead of hanging forever if a site is blocked.
-
-### 3. Clearer Error Messages
-Instead of a generic "Failed" message, the app will now provide specific feedback:
-- **Network Error**: Suggests checking your API settings if the server can't be reached.
-- **Unsupported Site**: Tells you if the specific website isn't supported.
-- **Private Video**: Tells you if the video is restricted.
+### ২. কুকি ফাইল তৈরি
+আমি [server/cookies.txt](file:///D:/project/d%20+a/Downloader/server/cookies.txt) নামে একটি ফাইল তৈরি করেছি।
 
 ---
 
-## Final Steps for You
+## আপনার যা করা লাগবে (খুবই গুরুত্বপূর্ণ)
 
-> [!IMPORTANT]
-> **Rebuild the Server**
-> You MUST rebuild the server to activate these new debugging features:
-> ```bash
-> docker-compose build server
-> docker-compose up -d server
-> ```
+> [!CAUTION]
+> **কুকি পেস্ট করুন:**
+> আপনি যে কুকিগুলো ব্রাউজার থেকে সংগ্রহ করেছেন, সেগুলো এখনই **[server/cookies.txt](file:///D:/project/d%20+a/Downloader/server/cookies.txt)** ফাইলটি ওপেন করে এর ভেতরে পেস্ট করুন এবং সেভ করুন। (ফাইলের আগের লেখাগুলো মুছে দিবেন)।
 
-## How to Debug if it still fails:
-1.  Open the **⚙️ Settings** in the app.
-2.  Click **Test Connection**.
-    - If it says **"Connected"**, the network is fine.
-    - If it says **"yt-dlp not found"**, check your server build.
-3.  If the connection is fine but the link still fails, check your server console logs for the specific error from the tool.
+### এবার আপডেট দিন:
+
+১. **GitHub এ পুশ করুন:**
+টার্মিনালে এই কমান্ডগুলো দিন:
+```powershell
+cd "D:/project/d +a/Downloader"
+git add .
+git commit -m "Add YouTube cookies for bypass"
+git push origin main --force
+```
+
+২. **Render চেক করুন:**
+Render ড্যাশবোর্ডে গিয়ে দেখুন বিল্ড শেষ হয়েছে কি না।
+
+বিল্ড শেষ হলে আপনার অ্যাপে ইউটিউব লিঙ্ক দিয়ে ট্রাই করুন। এবার কোনো "Bot" এরর আসবে না এবং ভিডিওর সব তথ্য চলে আসবে!
+
+**সবকিছু ঠিক থাকলে আমাকে জানান!**

@@ -1,8 +1,6 @@
-# Task: Online Hosting Setup
+# Task: Play Store Ready YouTube Bypass
 
-- `[x]` Create server/.gitignore
-- `[x]` Prepare server/Dockerfile for production
-- `[x]` Update server/index.ts for dynamic port and host
-- `[ ]` Push code to GitHub
-- `[ ]` Deploy to Render
-- `[ ]` Update App with new Server URL
+- `[x]` Update server/ytdlp.service.ts to use cookies
+- `[x]` Update server/Dockerfile to copy cookies.txt
+- `[x]` Create placeholder server/cookies.txt
+- `[ ]` Push to GitHub and Verify on Render
