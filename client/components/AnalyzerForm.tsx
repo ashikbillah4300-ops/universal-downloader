@@ -26,9 +26,9 @@ export function AnalyzerForm({ onAnalyzeSuccess }: AnalyzerFormProps) {
       onAnalyzeSuccess({ ...res.data, originalUrl: url });
     } catch (err: any) {
       if (err.code === "ERR_NETWORK" || !err.response) {
-        setError(`Network Error: Cannot reach server. Please check your API Settings (⚙️) and ensure the URL is correct.`);
+        setError(`Network Error: Cannot reach server. If you just deployed, wait 30 seconds and try again.`);
       } else {
-        setError(err.response?.data?.error || "Failed to analyze video URL. The site might be blocked or the link is invalid.");
+        setError(err.response?.data?.error || err.message || "Failed to analyze video URL.");
       }
     } finally {
       setIsLoading(false);

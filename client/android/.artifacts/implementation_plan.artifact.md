@@ -1,28 +1,24 @@
-# Final Polishing and Video Analysis Fix
+# Implementation Plan: Detailed Error Reporting and Analysis Fix
 
-The app is now successfully connecting to the online server, but video analysis is failing with a generic tool error. We also need to clean up the UI by removing the settings button.
+The app is connected to the server, but `yt-dlp` is failing to read the video links (likely due to YouTube blocking Render's IP). This plan focuses on getting the exact error message from the server and trying advanced bypass techniques.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Settings Button**: User এর অনুরোধে সেটিংস বাটনটি সরিয়ে ফেলা হবে, কারণ এখন অ্যাপে ডিফল্টভাবেই অনলাইন লিঙ্কটি সেট করা আছে।
-> - **Video Analysis**: YouTube এবং অন্যান্য সাইট অনেক সময় Render এর মতো ক্লাউড সার্ভার ব্লক করে দেয়। আমি `yt-dlp` এর কনফিগারেশন আরও আপডেট করছি যাতে এটি এই বাধাগুলো পার হতে পারে।
+> - **Error Reporting**: আমি সার্ভারের কোড এমনভাবে আপডেট করছি যাতে এটি ভিডিও টুলের (yt-dlp) আসল ভুলটি আপনাকে দেখায়। এটি আমাকে বুঝতে সাহায্য করবে যে ইউটিউব কি আমাদের সার্ভারকে ব্লক করেছে কি না।
+> - **Test with different links**: ইউটিউব ছাড়াও অন্য কোনো সাইটের (যেমন: Vimeo বা DailyMotion) লিঙ্ক দিয়ে একবার ট্রাই করে দেখবেন কি না।
 
 ## Proposed Changes
-
-### [Component: Android App]
-
-#### [MODIFY] [Navbar.tsx](file:///D:/project/d%20+a/Downloader/client/components/Navbar.tsx)
-- সোর্স কোড থেকে `ApiSettings` কম্পোনেন্টটি সরিয়ে ফেলা হবে।
 
 ### [Component: Backend Server]
 
 #### [MODIFY] [ytdlp.service.ts](file:///D:/project/d%20+a/Downloader/server/src/services/ytdlp.service.ts)
-- `yt-dlp` কমান্ডে কিছু প্রোডাকশন-রেডি ফ্ল্যাগ যোগ করা হবে (যেমন: `--no-check-certificate`, `--prefer-free-formats`).
-- ইউটিউবের বিশেষ ব্লকিং এড়ানোর জন্য বাড়তি কুশলতা যোগ করা হবে।
+- `yt-dlp` এর আসল এরর মেসেজটি (Stderr) ক্লায়েন্টে পাঠানোর ব্যবস্থা করা।
+- আরও কিছু অ্যাডভান্সড ফ্ল্যাগ যোগ করা (যেমন: `--no-playlist`, `--extract-audio` এর জন্য প্রস্তুতি)।
+- `YouTube` এর জন্য বিশেষ কিছু প্যারামিটার যোগ করা।
 
 ## Verification Plan
 
 ### Manual Verification
 - GitHub এ কোড পুশ করার পর Render বিল্ড শেষ হওয়া পর্যন্ত অপেক্ষা করা।
-- অ্যাপে ইউটিউব এবং ফেসবুকের লিঙ্ক দিয়ে ভিডিওর তথ্য আসে কি না চেক করা।
+- অ্যাপে ইউটিউব লিঙ্ক দিয়ে এরর মেসেজটি দেখা। যদি এটি "403 Forbidden" বা "Bot detection" বলে, তবে আমাদের অন্য কোনো বুদ্ধি করতে হবে।

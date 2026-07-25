@@ -27,8 +27,10 @@ export const analyzeVideoUrl = async (url: string): Promise<VideoInfo> => {
       "--skip-download",
       "--no-check-certificate",
       "--prefer-free-formats",
+      "--no-playlist",
+      "--geo-bypass",
       "--add-header", "Accept-Language:en-US,en;q=0.9",
-      "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+      "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
       url
     ];
 
@@ -57,16 +59,24 @@ export const analyzeVideoUrl = async (url: string): Promise<VideoInfo> => {
         try {
           resolve(JSON.parse(stdout) as VideoInfo);
         } catch (e) {
-          reject(new Error("Failed to parse video information."));
+          reject(new Error(`Failed to parse video info: ${stdout.slice(0, 100)}...`));
         }
       } else {
         console.error(`yt-dlp failed with code ${code}. Stderr: ${stderr}`);
-        if (stderr.includes("Unsupported URL")) {
-          reject(new Error("This website is not supported yet."));
-        } else if (stderr.includes("Private video")) {
-          reject(new Error("This video is private and cannot be downloaded."));
+
+        // Return the actual error from yt-dlp to the user for better debugging
+        const cleanError = stderr.split('\n')
+          .filter(line => line.startsWith('ERROR:') || line.startsWith('WARNING:'))
+          .join(' ')
+          .replace('ERROR: ', '')
+          .slice(0, 200);
+
+        if (stderr.includes("403") || stderr.includes("Forbidden") || stderr.includes("Sign in to confirm you’re not a bot")) {
+          reject(new Error("YouTube blocked our server. We may need to switch hosting or use a proxy. Error: " + cleanError));
+        } else if (stderr.includes("Unsupported URL")) {
+          reject(new Error("This website is not supported or the link is invalid."));
         } else {
-          reject(new Error("The video tool failed to read this link. It might be invalid or protected."));
+          reject(new Error(cleanError || "The video tool failed to read this link. It might be private or protected."));
         }
       }
     });
