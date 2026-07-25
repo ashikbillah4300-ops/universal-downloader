@@ -11,7 +11,7 @@ async function main() {
 
     app.listen(Number(port), "0.0.0.0", () => {
       console.log(`Server is running on http://0.0.0.0:${port}`);
-      console.log(`Local network access: http://192.168.68.104:${port}`);
+      console.log(`Online and local network access ready.`);
     });
   } catch (error) {
     console.error("Failed to start server:", error);
