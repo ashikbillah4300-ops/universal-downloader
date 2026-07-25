@@ -1,6 +1,7 @@
 import { spawn, exec } from "child_process";
 import { promisify } from "util";
 import path from "path";
+import fs from "fs";
 import ffmpegPath from "ffmpeg-static";
 
 const execAsync = promisify(exec);
