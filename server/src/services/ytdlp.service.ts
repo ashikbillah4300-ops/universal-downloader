@@ -25,7 +25,10 @@ export const analyzeVideoUrl = async (url: string): Promise<VideoInfo> => {
       "--dump-json",
       "--no-warnings",
       "--skip-download",
-      "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "--no-check-certificate",
+      "--prefer-free-formats",
+      "--add-header", "Accept-Language:en-US,en;q=0.9",
+      "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
       url
     ];
 

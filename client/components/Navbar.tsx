@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CloudDownload, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ApiSettings } from "./ApiSettings";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +26,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ApiSettings />
           <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
