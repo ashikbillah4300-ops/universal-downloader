@@ -1,7 +1,12 @@
 FROM node:20-alpine
 
-# Install Python and ffmpeg for yt-dlp
-RUN apk add --no-cache python3 ffmpeg
+# Install Python, pip, and ffmpeg for yt-dlp
+RUN apk add --no-cache python3 py3-pip ffmpeg
+
+# Create a virtual environment and install yt-dlp
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install --no-cache-dir yt-dlp
 
 WORKDIR /app
 

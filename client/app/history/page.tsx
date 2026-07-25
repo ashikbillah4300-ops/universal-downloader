@@ -33,9 +33,29 @@ export default function HistoryPage() {
     }
   };
 
+  const handleClearAll = async () => {
+    if (!confirm("Are you sure you want to clear all history?")) return;
+    try {
+      await api.delete("/history");
+      setHistory([]);
+    } catch (error) {
+      alert("Failed to clear history");
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl flex-grow">
-      <h1 className="text-3xl font-bold mb-8 text-white">Download History</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-white">Download History</h1>
+        {history.length > 0 && (
+          <button
+            onClick={handleClearAll}
+            className="px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+          >
+            <Trash2 className="w-4 h-4" /> Clear All
+          </button>
+        )}
+      </div>
       
       {isLoading ? (
         <div className="flex justify-center p-12">

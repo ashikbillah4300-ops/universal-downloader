@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Film, Music, Clock, Eye, User } from "lucide-react";
+import { Download, Film, Music, Clock, Eye, User, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { api } from "@/lib/api";
 
@@ -137,8 +137,8 @@ export function VideoDetails({ data }: VideoDetailsProps) {
                   </span>
                 </div>
                 {downloadingFormat === format.format_id ? (
-                   <span className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center animate-pulse">
-                     <Download className="w-4 h-4 text-primary animate-bounce" />
+                   <span className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                     <Loader2 className="w-4 h-4 text-primary animate-spin" />
                    </span>
                 ) : (
                   <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
@@ -174,8 +174,8 @@ export function VideoDetails({ data }: VideoDetailsProps) {
                   </span>
                 </div>
                 {downloadingFormat === format.format_id ? (
-                   <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center animate-pulse">
-                     <Download className="w-4 h-4 text-secondary animate-bounce" />
+                   <span className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+                     <Loader2 className="w-4 h-4 text-secondary animate-spin" />
                    </span>
                 ) : (
                   <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors">

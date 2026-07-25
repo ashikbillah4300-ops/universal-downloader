@@ -1,0 +1,9 @@
+node_modules
+dist
+temp
+*.db
+*.db-journal
+.env
+yt-dlp.exe
+ffmpeg.exe
+ffprobe.exe

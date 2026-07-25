@@ -25,7 +25,11 @@ export function AnalyzerForm({ onAnalyzeSuccess }: AnalyzerFormProps) {
       const res = await api.post("/analyze", { url });
       onAnalyzeSuccess({ ...res.data, originalUrl: url });
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to analyze video URL.");
+      if (err.code === "ERR_NETWORK" || !err.response) {
+        setError(`Network Error: Cannot reach server. Please check your API Settings (⚙️) and ensure the URL is correct.`);
+      } else {
+        setError(err.response?.data?.error || "Failed to analyze video URL. The site might be blocked or the link is invalid.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -40,25 +44,25 @@ export function AnalyzerForm({ onAnalyzeSuccess }: AnalyzerFormProps) {
     >
       <form onSubmit={handleAnalyze} className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-        <div className="relative flex items-center bg-cards rounded-2xl p-2 border border-white/10 shadow-2xl">
-          <div className="pl-4 pr-2 text-gray-400">
-            <Search className="w-6 h-6" />
+        <div className="relative flex items-center bg-cards rounded-2xl p-1.5 border border-white/10 shadow-2xl gap-1.5">
+          <div className="pl-3 pr-1 text-gray-400 flex-shrink-0 hidden sm:block">
+            <Search className="w-5 h-5" />
           </div>
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="Paste video URL here... (YouTube, Vimeo, etc.)"
-            className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-gray-500 py-4 text-lg"
+            placeholder="Paste video URL here..."
+            className="flex-1 min-w-0 bg-transparent border-none outline-none text-white placeholder:text-gray-500 py-3 px-3 sm:px-0 text-sm sm:text-base"
             required
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-primary hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-shrink-0 bg-primary hover:bg-blue-500 text-white px-4 sm:px-7 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
           >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Analyze"}
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Analyze"}
           </button>
         </div>
       </form>
