@@ -8,10 +8,15 @@ import path from "path";
 const app = express();
 
 // Middleware
-app.use(helmet({
-  contentSecurityPolicy: false, // Disable CSP for easier local testing
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  credentials: true
 }));
-app.use(cors());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(express.json());
 
 // Request logger for debugging

@@ -5,6 +5,7 @@ import { Settings, Save, X, Activity, CheckCircle, AlertTriangle, Loader2 } from
 import { motion, AnimatePresence } from "framer-motion";
 import { api, updateApiBaseURL } from "@/lib/api";
 import axios from "axios";
+import { Capacitor, CapacitorHttp, HttpResponse } from "@capacitor/core";
 
 export function ApiSettings() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,10 +31,23 @@ export function ApiSettings() {
 
     try {
       // Direct call to health endpoint (ignoring base API interceptors if any)
-      const healthUrl = url.endsWith("/api") ? url.replace(/\/api$/, "/health") : `${url}/health`;
-      const res = await axios.get(healthUrl, { timeout: 5000 });
+      const baseUrl = url.endsWith("/api") ? url.replace(/\/api$/, "") : url;
+      const healthUrl = baseUrl + "/health";
 
-      if (res.data.status === "ok") {
+      let res;
+      if (Capacitor.isNativePlatform()) {
+        const response: HttpResponse = await CapacitorHttp.get({
+          url: healthUrl,
+          connectTimeout: 10000,
+          readTimeout: 10000
+        });
+        res = { data: response.data, status: response.status };
+      } else {
+        const response = await axios.get(healthUrl, { timeout: 10000 });
+        res = { data: response.data, status: response.status };
+      }
+
+      if (res.status === 200 && res.data.status === "ok") {
         setTestStatus("success");
         setTestMessage(`Connected! yt-dlp version: ${res.data.yt_dlp_version}`);
       } else {
