@@ -16,21 +16,22 @@ WORKDIR /app
 # Set default port
 ENV PORT=8000
 
-# Copy package files
+# Copy package files first for better caching
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Install dependencies
+# Install dependencies including devDependencies for the build step
 RUN npm install
 
-# Copy the rest of the code
+# Copy the rest of the source code
 COPY . .
 
-# Generate prisma client
-RUN npx prisma generate
+# Fix permissions for binaries (crucial for Windows to Linux moves)
+RUN chmod -R +x node_modules/.bin
 
-# Build TypeScript
-RUN npx tsc
+# Generate prisma client and build TypeScript
+RUN npm run prisma:generate
+RUN npm run build
 
 EXPOSE 8000
 
